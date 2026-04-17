@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-deployement
+spec:
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    
+    spec:
+      containers:
+        - name: product-container
+          image: santhosh0476/product-service
+          ports:
+             - containerPort: 4000
