@@ -9,10 +9,9 @@ pipeline{
         }
     
 
-    stages{
-       stage ('clone'){
+   stage ('clone'){
     steps{
-        git url: 'https://github.com/santhoshmanoharan04/ecommerce-microservices.git'
+        git branch: 'main', url: 'https://github.com/santhoshmanoharan04/ecommerce-microservices.git'
     }
 }
         stage('terraform init'){
