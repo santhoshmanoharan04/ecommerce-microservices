@@ -11,11 +11,7 @@ provider "aws" {
   region = "eu-north-1"
 }
 
-<<<<<<< HEAD
-# ✅ Use existing security group (DO NOT create)
-=======
-# ✅ Use existing Security Group (no creation)
->>>>>>> 74dbdc8 (add dynamic API URL)
+# Use existing Security Group
 data "aws_security_group" "existing_sg" {
   filter {
     name   = "group-name"
@@ -23,20 +19,12 @@ data "aws_security_group" "existing_sg" {
   }
 }
 
-<<<<<<< HEAD
-# ✅ Create EC2 only
-=======
-# ✅ Create EC2 using existing resources
->>>>>>> 74dbdc8 (add dynamic API URL)
+# Create EC2 using existing resources
 resource "aws_instance" "example" {
   ami           = "ami-080254318c2d8932f"
   instance_type = "t3.micro"
 
-<<<<<<< HEAD
-  key_name = "deployer-key"  # already exists
-=======
-  key_name = "deployer-key"  # existing key pair
->>>>>>> 74dbdc8 (add dynamic API URL)
+  key_name = "deployer-key"
 
   vpc_security_group_ids = [data.aws_security_group.existing_sg.id]
 
@@ -45,14 +33,7 @@ resource "aws_instance" "example" {
   }
 }
 
-<<<<<<< HEAD
-# ✅ Output public IP (useful later)
+# Output EC2 Public IP
 output "ec2_public_ip" {
   value = aws_instance.example.public_ip
 }
-=======
-# ✅ Output EC2 Public IP (useful for Jenkins later)
-output "ec2_public_ip" {
-  value = aws_instance.example.public_ip
-}
->>>>>>> 74dbdc8 (add dynamic API URL)
