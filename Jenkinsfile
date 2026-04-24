@@ -30,10 +30,12 @@ pipeline {
         stage('Get EC2 IP') {
             steps {
                 script {
-                    EC2_IP = sh(
+                    def ip = sh(
                         script: "terraform output -raw ec2_public_ip",
                         returnStdout: true
                     ).trim()
+
+                    env.EC2_IP = ip
                 }
             }
         }
@@ -88,5 +90,6 @@ EOF
                 }
             }
         }
+
     }
 }
