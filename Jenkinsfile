@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB = "santhosh0476"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        EC2_IP = "16.171.29.75"
+        EC2_IP = "13.60.200.235"
     }
 
     stages {
