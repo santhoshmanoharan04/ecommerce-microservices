@@ -61,10 +61,9 @@ pipeline {
         }
 
         stage('Deploy to EC2') {
-       stage('Deploy to EC2') {
-    steps {
-        sshagent(['ec2-ssh-key']) {
-            sh '''
+            steps {
+                sshagent(['ec2-ssh-key']) {
+                    sh '''
 ssh -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
 
 docker pull $DOCKER_HUB/frontend:$IMAGE_TAG
@@ -76,8 +75,9 @@ docker run -d -p 3000:3000 --name frontend $DOCKER_HUB/frontend:$IMAGE_TAG
 
 EOF
 '''
+                }
+            }
         }
-    }
-}
+
     }
 }
