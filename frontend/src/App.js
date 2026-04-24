@@ -6,7 +6,7 @@ function App() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    fetch("http://product-service:4000/products") // for Kubernetes
+    fetch("http://13.60.200.235:4000/products") // for Kubernetes
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error(err));
