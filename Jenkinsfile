@@ -28,16 +28,6 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
-            steps {
-                sh '''
-                docker build -t $DOCKER_HUB/product-service:$IMAGE_TAG ./product-service
-                docker build -t $DOCKER_HUB/cart-service:$IMAGE_TAG ./cart-service
-                docker build -t $DOCKER_HUB/frontend:$IMAGE_TAG ./frontend
-                '''
-            }
-        }
-
         stage('Login Docker') {
             steps {
                 withCredentials([usernamePassword(
@@ -47,6 +37,16 @@ pipeline {
                 )]) {
                     sh 'echo $TOKEN | docker login -u $USERNAME --password-stdin'
                 }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh '''
+                docker build -t $DOCKER_HUB/product-service:$IMAGE_TAG ./product-service
+                docker build -t $DOCKER_HUB/cart-service:$IMAGE_TAG ./cart-service
+                docker build -t $DOCKER_HUB/frontend:$IMAGE_TAG ./frontend
+                '''
             }
         }
 
@@ -78,6 +78,5 @@ pipeline {
                 }
             }
         }
-
     }
 }
