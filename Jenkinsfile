@@ -9,16 +9,22 @@ pipeline {
 
     stages {
 
-        stage('terraform init') {
+        stage('Terraform') {
             steps {
-                sh 'terraform init'
-            }
-        }
+                withCredentials([usernamePassword(
+                    credentialsId: 'aws-cred',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                )]) {
+                    sh '''
+                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 
-        stage('terraform apply') {
-            steps {
-                sh 'terraform plan'
-                sh 'terraform apply -auto-approve'
+                    terraform init
+                    terraform plan
+                    terraform apply -auto-approve
+                    '''
+                }
             }
         }
 
@@ -32,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('login docker') {
+        stage('Login Docker') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'docker-cred',
@@ -44,7 +50,7 @@ pipeline {
             }
         }
 
-        stage('push image') {
+        stage('Push Images') {
             steps {
                 sh '''
                 docker push $DOCKER_HUB/product-service:$IMAGE_TAG
@@ -59,10 +65,14 @@ pipeline {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
                     ssh -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
+
                     docker pull $DOCKER_HUB/frontend:$IMAGE_TAG
+
                     docker stop frontend || true
                     docker rm frontend || true
+
                     docker run -d -p 3000:3000 --name frontend $DOCKER_HUB/frontend:$IMAGE_TAG
+
                     EOF
                     '''
                 }
