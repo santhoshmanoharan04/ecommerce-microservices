@@ -64,17 +64,17 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@$EC2_IP << EOF
+ssh -o StrictHostKeyChecking=no ubuntu@$EC2_IP << 'EOF'
 
-                    docker pull $DOCKER_HUB/frontend:$IMAGE_TAG
+docker pull $DOCKER_HUB/frontend:$IMAGE_TAG
 
-                    docker stop frontend || true
-                    docker rm frontend || true
+docker stop frontend || true
+docker rm frontend || true
 
-                    docker run -d -p 3000:3000 --name frontend $DOCKER_HUB/frontend:$IMAGE_TAG
+docker run -d -p 3000:3000 --name frontend $DOCKER_HUB/frontend:$IMAGE_TAG
 
-                    EOF
-                    '''
+EOF
+'''
                 }
             }
         }
