@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_HUB = "santhosh0476"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        EC2_IP = "13.60.200.235"
     }
 
     stages {
@@ -24,6 +23,17 @@ pipeline {
                     terraform plan
                     terraform apply -auto-approve
                     '''
+                }
+            }
+        }
+
+        stage('Get EC2 IP') {
+            steps {
+                script {
+                    EC2_IP = sh(
+                        script: "terraform output -raw ec2_public_ip",
+                        returnStdout: true
+                    ).trim()
                 }
             }
         }
@@ -78,6 +88,5 @@ EOF
                 }
             }
         }
-
     }
 }
